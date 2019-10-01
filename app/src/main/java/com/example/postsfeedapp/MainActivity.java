@@ -28,6 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 showPosts(getUniquePosts(posts));
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -119,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 myHeaders.put("Content-Type", "application/json");
                 return myHeaders;
             }
-
         };
 
         queue.add(postsRequest);
@@ -141,6 +142,15 @@ public class MainActivity extends AppCompatActivity {
         for (String key : filterMap.keySet()) {
             filtered.add(filterMap.get(key));
         }
+
+        Comparator<PostModel> compareById = new Comparator<PostModel>() {
+            @Override
+            public int compare(PostModel o1, PostModel o2) {
+                return o1.getId() - o2.getId();
+            }
+        };
+
+        Collections.sort(filtered, compareById);
 
         return filtered;
     }
